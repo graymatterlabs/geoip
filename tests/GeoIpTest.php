@@ -7,8 +7,8 @@ namespace GrayMatterLabs\GeoIp\Tests;
 use GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException;
 use GrayMatterLabs\GeoIp\GeoIp;
 use GrayMatterLabs\GeoIp\Location;
-use GrayMatterLabs\GeoIp\NullCache;
 use GrayMatterLabs\GeoIp\Tests\Mocks\MockLocator;
+use GrayMatterLabs\SimpleCache\NullCache;
 use PHPUnit\Framework\TestCase;
 
 class GeoIpTest extends TestCase

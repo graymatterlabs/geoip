@@ -14,8 +14,6 @@ class GeoIp
 {
     protected static ?Location $default;
 
-    protected static bool $immutable = false;
-
     public function __construct(protected Locator $locator, protected CacheInterface $cache)
     {
     }
@@ -36,7 +34,7 @@ class GeoIp
             throw new InvalidIpAddressException($ip);
         }
 
-        $location = $this->remember($ip, function ($ip) {
+        return $this->remember($ip, function ($ip) {
             try {
                 if ($this->isPrivateRange($ip)) {
                     throw new InvalidIpAddressException($ip);
@@ -51,12 +49,6 @@ class GeoIp
                 return $this->getDefaultLocation($ip);
             }
         });
-
-        if (static::$immutable && ! is_subclass_of($location, ImmutableLocation::class)) {
-            $location = new ImmutableLocation($location->toArray());
-        }
-
-        return $location;
     }
 
     /**
@@ -75,9 +67,10 @@ class GeoIp
             return $cached;
         }
 
+        /** @var \GrayMatterLabs\GeoIp\Location $location */
         $location = $closure($ip);
 
-        if (! $location->isDefault()) {
+        if (! $location->isDefault) {
             $this->cache->set($key, $location);
         }
 
@@ -130,10 +123,7 @@ class GeoIp
      */
     protected function getDefaultLocation(string $ip): Location
     {
-        return static::$default->clone([
-            'ip' => $ip,
-            'is_default' => true,
-        ]);
+        return static::$default->clone(ip: $ip, isDefault: true);
     }
 
     /**
@@ -143,7 +133,7 @@ class GeoIp
      */
     protected function hasDefaultLocation(): bool
     {
-        return ! empty(static::$default);
+        return isset(static::$default);
     }
 
     /**
@@ -156,17 +146,5 @@ class GeoIp
     public static function setDefaultLocation(?Location $location): void
     {
         static::$default = $location;
-    }
-
-    /**
-     * Specify whether the location returned should be immutable.
-     *
-     * @param bool $immutable
-     *
-     * @return void
-     */
-    public static function setImmutable(bool $immutable): void
-    {
-        static::$immutable = $immutable;
     }
 }

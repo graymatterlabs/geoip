@@ -14,30 +14,28 @@ use PHPUnit\Framework\TestCase;
 class GeoIpTest extends TestCase
 {
     /** @dataProvider providesValidIpAddresses */
-    public function test_it_locates_an_ip_addresses_geolocation($ip): void
+    public function test_it_locates_an_ip_addresses_geolocation(string $ip): void
     {
         $location = $this->makeGeoIp()->locate($ip);
 
-        $this->assertFalse($location->isDefault());
+        $this->assertFalse($location->isDefault);
         $this->assertEquals($ip, $location->ip);
     }
 
     /** @dataProvider providesInvalidIpAddresses */
-    public function test_it_requires_a_valid_ip_address($ip): void
+    public function test_it_requires_a_valid_ip_address(string $ip): void
     {
         $this->expectException(InvalidIpAddressException::class);
         $this->makeGeoIp()->locate($ip);
     }
 
     /** @dataProvider providesPrivateIpAddresses */
-    public function test_it_falls_back_to_a_default_location_for_reserved_ips($ip): void
+    public function test_it_falls_back_to_a_default_location_for_reserved_ips(string $ip): void
     {
-        GeoIp::setDefaultLocation(new Location([
-            'ip' => '1.1.1.1',
-        ]));
+        GeoIp::setDefaultLocation(new Location('1.1.1.1'));
 
         $location = $this->makeGeoIp()->locate($ip);
-        $this->assertTrue($location->isDefault());
+        $this->assertTrue($location->isDefault);
         GeoIp::setDefaultLocation(null);
     }
 

@@ -11,8 +11,6 @@ class MockLocator implements Locator
 {
     public function locate(string $ip): Location
     {
-        return new Location([
-            'ip' => $ip,
-        ]);
+        return new Location($ip);
     }
 }

@@ -111,7 +111,7 @@ class GeoIp
      */
     protected function getCacheKey(string $ip): string
     {
-        return 'geoip:'.$ip;
+        return 'geoip:' . md5($ip);
     }
 
     /**

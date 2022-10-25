@@ -39,8 +39,8 @@ class GeoIpTest extends TestCase
         GeoIp::setDefaultLocation(null);
     }
 
-    public function test_it_raises_an_exception_if_a_default_location_is_not_specified_and_an_ip_address_cannot_be_located(
-    ): void {
+    public function test_it_raises_an_exception_if_a_default_location_is_not_specified_and_an_ip_address_cannot_be_located(): void
+    {
         $this->expectException(InvalidIpAddressException::class);
         $this->makeGeoIp()->locate('127.0.0.1');
     }

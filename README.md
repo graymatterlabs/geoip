@@ -26,7 +26,7 @@ $geoip = new GeoIp($locator, new NullCache());
 
 $location = $geoip->locate($ip);
 
-$location->country; // 'US'
+$location->countryCode; // 'US'
 ```
 For examples of usage and implementation, please check out the `tests/` directory.
 

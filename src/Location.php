@@ -10,9 +10,9 @@ class Location
 {
     public function __construct(
         public readonly string $ip,
-        public readonly ?string $country = null,
+        public readonly ?string $countryCode = null,
         public readonly ?string $countryName = null,
-        public readonly ?string $state = null,
+        public readonly ?string $stateCode = null,
         public readonly ?string $stateName = null,
         public readonly ?string $city = null,
         public readonly ?string $postalCode = null,
@@ -22,14 +22,14 @@ class Location
     ) {
     }
 
-    public function clone(...$values): static
+    public function clone(...$properties): static
     {
         $clone = (new ReflectionClass(static::class))->newInstanceWithoutConstructor();
 
-        foreach (get_object_vars($this) as $objectField => $objectValue) {
-            $objectValue = array_key_exists($objectField, $values) ? $values[$objectField] : $objectValue;
+        foreach (get_object_vars($this) as $property => $value) {
+            $value = array_key_exists($property, $properties) ? $properties[$property] : $value;
 
-            $clone->$objectField = $objectValue;
+            $clone->$property = $value;
         }
 
         return $clone;

@@ -20,8 +20,12 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.9",
+        "geoip2/geoip2": "~2.1",
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5"
+    },
+    "suggest": {
+        "geoip2/geoip2": "Required to use the MaxMindDatabase service (~2.1)"
     },
     "autoload": {
         "psr-4": {

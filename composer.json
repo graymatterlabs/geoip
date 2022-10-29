@@ -25,7 +25,7 @@
         "phpunit/phpunit": "^9.5"
     },
     "suggest": {
-        "geoip2/geoip2": "Required to use the MaxMindDatabase service (~2.1)"
+        "geoip2/geoip2": "Required to use the MaxMind service (~2.1)"
     },
     "autoload": {
         "psr-4": {

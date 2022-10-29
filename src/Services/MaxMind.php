@@ -6,31 +6,40 @@ namespace GrayMatterLabs\GeoIp\Services;
 
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
+use GeoIp2\ProviderInterface;
+use GeoIp2\WebService\Client;
 use GrayMatterLabs\GeoIp\Contracts\Locator;
 use GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException;
 use GrayMatterLabs\GeoIp\Location;
 
 /*
- * This service is compatible with both GeoIP2 enterprise and GeoLite2 free databases.
+ * This service is compatible with both free and paid GeoIP2 databases and web services.
  *
  * Using this service requires geoip2/geoip2:~2.1.
  *
- * To learn more including where to purchase and/or download the databases, read here:
+ * To learn more including where to license the databases and/or services from, read here:
  * https://www.maxmind.com
  */
-class MaxMindDatabase implements Locator
+class MaxMind implements Locator
 {
-    private Reader $reader;
-
-    public function __construct(string $path, array $locales = ['en'])
+    public function __construct(private ProviderInterface $provider)
     {
-        $this->reader = new Reader($path, $locales);
+    }
+
+    public static function database(string $path, array $locales = ['en']): static
+    {
+        return new static(new Reader($path, $locales));
+    }
+
+    public static function web(int $accountId, string $licenseKey, array $locales = ['en']): static
+    {
+        return new static(new Client($accountId, $licenseKey, $locales));
     }
 
     public function locate(string $ip): Location
     {
         try {
-            $location = $this->reader->city($ip);
+            $location = $this->provider->city($ip);
         } catch (AddressNotFoundException $e) {
             throw new LocationNotFoundException($ip);
         }

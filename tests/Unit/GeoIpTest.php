@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp\Tests;
+namespace GrayMatterLabs\GeoIp\Tests\Unit;
 
 use GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException;
 use GrayMatterLabs\GeoIp\GeoIp;

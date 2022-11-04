@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace GrayMatterLabs\GeoIp\Tests\Integration;
 
 use GeoIp2\Database\Reader;
-use GeoIp2\ProviderInterface;
-use GeoIp2\WebService\Client;
 use GrayMatterLabs\GeoIp\GeoIp;
 use GrayMatterLabs\GeoIp\Services\MaxMind;
 use GrayMatterLabs\SimpleCache\NullCache;

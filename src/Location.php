@@ -16,8 +16,11 @@ class Location
         public readonly ?string $stateName = null,
         public readonly ?string $city = null,
         public readonly ?string $postalCode = null,
+        public readonly ?string $continent = null,
         public readonly ?float $latitude = null,
         public readonly ?float $longitude = null,
+        public readonly ?string $timezone = null,
+        public readonly ?string $currency = null,
         public readonly bool $isDefault = false,
     ) {
     }

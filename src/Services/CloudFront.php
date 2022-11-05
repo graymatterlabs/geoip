@@ -6,6 +6,7 @@ namespace GrayMatterLabs\GeoIp\Services;
 
 use GrayMatterLabs\GeoIp\Contracts\Locator;
 use GrayMatterLabs\GeoIp\Location;
+use GrayMatterLabs\GeoIp\Support\Currency;
 
 /*
  * A runtime-only Locator service leveraging CloudFront's 'additional geolocation headers'
@@ -29,6 +30,8 @@ class CloudFront implements Locator
             postalCode: $this->castHeaderIfExists('CloudFront-Viewer-Postal-Code'),
             latitude: $this->castHeaderIfExists('CloudFront-Viewer-Latitude', 'float'),
             longitude: $this->castHeaderIfExists('CloudFront-Viewer-Longitude', 'float'),
+            timezone: $this->castHeaderIfExists('CloudFront-Viewer-Time-Zone'),
+            currency: Currency::fromCountryCode($this->castHeaderIfExists('CloudFront-Viewer-Country'))
         );
     }
 

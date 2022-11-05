@@ -11,6 +11,7 @@ use GeoIp2\WebService\Client;
 use GrayMatterLabs\GeoIp\Contracts\Locator;
 use GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException;
 use GrayMatterLabs\GeoIp\Location;
+use GrayMatterLabs\GeoIp\Support\Currency;
 
 /*
  * This service is compatible with both free and paid GeoIP2 databases and web services.
@@ -52,8 +53,11 @@ class MaxMind implements Locator
             stateName: $location->mostSpecificSubdivision->name,
             city: $location->city->name,
             postalCode: $location->postal->code,
+            continent: $location->continent->code,
             latitude: $location->location->latitude,
-            longitude: $location->location->longitude
+            longitude: $location->location->longitude,
+            timezone: $location->location->timeZone,
+            currency: Currency::fromCountryCode($location->country->isoCode)
         );
     }
 }

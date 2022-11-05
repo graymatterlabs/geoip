@@ -7,6 +7,7 @@ namespace GrayMatterLabs\GeoIp\Services;
 use GrayMatterLabs\GeoIp\Contracts\Locator;
 use GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException;
 use GrayMatterLabs\GeoIp\Location;
+use GrayMatterLabs\GeoIp\Support\Currency;
 
 /*
  * A runtime-only Locator service leveraging Cloudflare's 'Add visitor location headers'
@@ -37,6 +38,7 @@ class Cloudflare implements Locator
             city: $this->castHeaderIfExists('CF_IPCITY'),
             latitude: $this->castHeaderIfExists('CF_IPLATITUDE', 'float'),
             longitude: $this->castHeaderIfExists('CF_IPLONGITUDE', 'float'),
+            currency: Currency::fromCountryCode($this->castHeaderIfExists('CF_IPCOUNTRY'))
         );
     }
 

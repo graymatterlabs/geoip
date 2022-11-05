@@ -13,7 +13,7 @@ This package ships with a set of runtime implementations of `psr/simple-cache` v
 You can install the package via composer:
 
 ```bash
-composer require graymatterlabs/geoip:^0.1
+composer require graymatterlabs/geoip:^0.3
 ```
 
 ## Usage

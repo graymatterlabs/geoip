@@ -6,8 +6,12 @@ namespace GrayMatterLabs\GeoIp\Support;
 
 class Currency
 {
-    public static function fromCountryCode(string $code): ?string
+    public static function fromCountryCode(string $code, mixed $default = null): mixed
     {
+        /*
+         * Map of ISO-3166 country codes to ISO-4217 currency codes.
+         * https://www.iban.com/currency-codes
+         */
         return [
             'AD' => 'EUR',
             'AE' => 'AED',
@@ -256,6 +260,6 @@ class Currency
             'ZA' => 'ZAR',
             'ZM' => 'ZMK',
             'ZW' => 'ZWL',
-        ][$code] ?? null;
+        ][$code] ?? $default;
     }
 }

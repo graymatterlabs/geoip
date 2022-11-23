@@ -57,7 +57,7 @@ class MaxMind implements Locator
             latitude: $location->location->latitude,
             longitude: $location->location->longitude,
             timezone: $location->location->timeZone,
-            currency: Currency::fromCountryCode($location->country->isoCode)
+            currency: Currency::fromCountryCode($location->country->isoCode ?? '')
         );
     }
 }

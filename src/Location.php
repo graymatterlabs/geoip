@@ -6,22 +6,22 @@ namespace GrayMatterLabs\GeoIp;
 
 use ReflectionClass;
 
-class Location
+readonly class Location
 {
     public function __construct(
-        public readonly string $ip,
-        public readonly ?string $countryCode = null,
-        public readonly ?string $countryName = null,
-        public readonly ?string $stateCode = null,
-        public readonly ?string $stateName = null,
-        public readonly ?string $city = null,
-        public readonly ?string $postalCode = null,
-        public readonly ?string $continent = null,
-        public readonly ?float $latitude = null,
-        public readonly ?float $longitude = null,
-        public readonly ?string $timezone = null,
-        public readonly ?string $currency = null,
-        public readonly bool $isDefault = false,
+        public string  $ip,
+        public ?string $countryCode = null,
+        public ?string $countryName = null,
+        public ?string $stateCode = null,
+        public ?string $stateName = null,
+        public ?string $city = null,
+        public ?string $postalCode = null,
+        public ?string $continent = null,
+        public ?float  $latitude = null,
+        public ?float  $longitude = null,
+        public ?string $timezone = null,
+        public ?string $currency = null,
+        public bool    $isDefault = false,
     ) {
     }
 

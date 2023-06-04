@@ -21,20 +21,39 @@ use GrayMatterLabs\GeoIp\Support\Currency;
  * To learn more including where to license the databases and/or services from, read here:
  * https://www.maxmind.com
  */
-class MaxMind implements Locator
+final class MaxMind implements Locator
 {
     public function __construct(private ProviderInterface $provider)
     {
     }
 
-    public static function database(string $path, array $locales = ['en']): static
+    /**
+     * * Instantiate an instance of MaxMind using the database provider.
+     *
+     * @param string $path
+     * @param array<string> $locales
+     *
+     * @return self
+     *
+     * @throws \MaxMind\Db\Reader\InvalidDatabaseException
+     */
+    public static function database(string $path, array $locales = ['en']): self
     {
-        return new static(new Reader($path, $locales));
+        return new self(new Reader($path, $locales));
     }
 
-    public static function web(int $accountId, string $licenseKey, array $locales = ['en']): static
+    /**
+     * Instantiate an instance of MaxMind using the web provider.
+     *
+     * @param int $accountId
+     * @param string $licenseKey
+     * @param array<string> $locales
+     *
+     * @return self
+     */
+    public static function web(int $accountId, string $licenseKey, array $locales = ['en']): self
     {
-        return new static(new Client($accountId, $licenseKey, $locales));
+        return new self(new Client($accountId, $licenseKey, $locales));
     }
 
     public function locate(string $ip): Location

@@ -8,7 +8,6 @@ use GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException;
 use GrayMatterLabs\GeoIp\GeoIp;
 use GrayMatterLabs\GeoIp\Location;
 use GrayMatterLabs\GeoIp\Tests\Mocks\MockLocator;
-use GrayMatterLabs\SimpleCache\NullCache;
 use PHPUnit\Framework\TestCase;
 
 class GeoIpTest extends TestCase
@@ -71,6 +70,6 @@ class GeoIpTest extends TestCase
 
     public function makeGeoIp(): GeoIp
     {
-        return new GeoIp(new MockLocator(), new NullCache());
+        return new GeoIp(new MockLocator());
     }
 }

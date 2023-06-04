@@ -6,7 +6,7 @@ namespace GrayMatterLabs\GeoIp\Exceptions;
 
 use Exception;
 
-class InvalidIpAddressException extends Exception
+final class InvalidIpAddressException extends Exception
 {
     public function __construct(string $ip)
     {

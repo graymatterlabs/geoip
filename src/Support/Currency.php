@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GrayMatterLabs\GeoIp\Support;
 
-class Currency
+final class Currency
 {
     public static function fromCountryCode(string $code, mixed $default = null): mixed
     {

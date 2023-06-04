@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace GrayMatterLabs\GeoIp;
 
-use Closure;
 use GrayMatterLabs\GeoIp\Contracts\Locator;
 use GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException;
 use GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException;
-use Psr\SimpleCache\CacheInterface;
 
-class GeoIp
+final class GeoIp
 {
-    protected static ?Location $default;
+    private static ?Location $default;
 
-    public function __construct(protected Locator $locator, protected CacheInterface $cache)
+    public function __construct(private Locator $locator)
     {
     }
 
@@ -34,47 +32,19 @@ class GeoIp
             throw new InvalidIpAddressException($ip);
         }
 
-        return $this->remember($ip, function ($ip) {
-            try {
-                if ($this->isPrivateRange($ip)) {
-                    throw new InvalidIpAddressException($ip);
-                }
-
-                return $this->locator->locate($ip);
-            } catch (LocationNotFoundException | InvalidIpAddressException $e) {
-                if (! $this->hasDefaultLocation()) {
-                    throw $e;
-                }
-
-                return $this->getDefaultLocation($ip);
+        try {
+            if ($this->isPrivateRange($ip)) {
+                throw new InvalidIpAddressException($ip);
             }
-        });
-    }
 
-    /**
-     * Resolve and remember the geolocation of the Ip address.
-     *
-     * @param string $ip
-     * @param \Closure $closure
-     *
-     * @return \GrayMatterLabs\GeoIp\Location
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    protected function remember(string $ip, Closure $closure): Location
-    {
-        $key = $this->getCacheKey($ip);
-        if ($cached = $this->cache->get($key)) {
-            return $cached;
+            return $this->locator->locate($ip);
+        } catch (LocationNotFoundException | InvalidIpAddressException $e) {
+            if (! $this->hasDefaultLocation()) {
+                throw $e;
+            }
+
+            return $this->getDefaultLocation($ip);
         }
-
-        /** @var \GrayMatterLabs\GeoIp\Location $location */
-        $location = $closure($ip);
-
-        if (! $location->isDefault) {
-            $this->cache->set($key, $location);
-        }
-
-        return $location;
     }
 
     /**
@@ -84,7 +54,7 @@ class GeoIp
      *
      * @return bool
      */
-    protected function isValid(string $ip): bool
+    private function isValid(string $ip): bool
     {
         return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) || filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
@@ -96,22 +66,10 @@ class GeoIp
      *
      * @return bool
      */
-    protected function isPrivateRange(string $ip): bool
+    private function isPrivateRange(string $ip): bool
     {
         return ! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)
         && ! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE);
-    }
-
-    /**
-     * Get the cache key for the Ip.
-     *
-     * @param string $ip
-     *
-     * @return string
-     */
-    protected function getCacheKey(string $ip): string
-    {
-        return 'geoip:' . md5($ip);
     }
 
     /**
@@ -121,9 +79,9 @@ class GeoIp
      *
      * @return \GrayMatterLabs\GeoIp\Location
      */
-    protected function getDefaultLocation(string $ip): Location
+    private function getDefaultLocation(string $ip): Location
     {
-        return static::$default->clone(ip: $ip, isDefault: true);
+        return self::$default->clone(ip: $ip, isDefault: true);
     }
 
     /**
@@ -131,9 +89,9 @@ class GeoIp
      *
      * @return bool
      */
-    protected function hasDefaultLocation(): bool
+    private function hasDefaultLocation(): bool
     {
-        return isset(static::$default);
+        return isset(self::$default);
     }
 
     /**
@@ -145,6 +103,6 @@ class GeoIp
      */
     public static function setDefaultLocation(?Location $location): void
     {
-        static::$default = $location;
+        self::$default = $location;
     }
 }

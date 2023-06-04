@@ -16,7 +16,7 @@ use GrayMatterLabs\GeoIp\Support\Currency;
  * To learn more including how to enable these headers, read here:
  * https://aws.amazon.com/about-aws/whats-new/2020/07/cloudfront-geolocation-headers/
  */
-class CloudFront implements Locator
+final class CloudFront implements Locator
 {
     public function locate(string $ip): Location
     {

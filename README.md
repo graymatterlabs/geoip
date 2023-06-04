@@ -6,29 +6,30 @@
 
 This package provides an opinionated framework for resolving geolocations from IP addresses.
 
-This package ships with a set of runtime implementations of `psr/simple-cache` via `graymatterlabs/simple-cache`. You're encouraged to provide your own implementation of PSR-16 using a persistent storage solution like Redis or Memcache in order to cache your locations after their first lookup.
-
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require graymatterlabs/geoip:^1.0
+composer require graymatterlabs/geoip:^2.0
 ```
 
 ## Usage
 
 ```php
 use GrayMatterLabs\GeoIp\GeoIp;
-use GrayMatterLabs\SimpleCache\NullCache;
 
-$geoip = new GeoIp($locator, new NullCache());
+$geoip = new GeoIp($locator);
+// $geoip = new CachedGeoIp($geoip, $cache);
 
 $location = $geoip->locate($ip);
 
 $location->countryCode; // 'US'
+
+if ($location->isDefault) {
+    //
+}
 ```
-For examples of usage and implementation, please check out the `tests/` directory.
 
 ## Testing
 

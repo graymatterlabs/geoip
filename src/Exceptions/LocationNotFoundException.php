@@ -6,7 +6,7 @@ namespace GrayMatterLabs\GeoIp\Exceptions;
 
 use Exception;
 
-class LocationNotFoundException extends Exception
+final class LocationNotFoundException extends Exception
 {
     public function __construct(string $ip)
     {

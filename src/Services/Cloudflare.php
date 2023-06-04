@@ -21,7 +21,7 @@ use GrayMatterLabs\GeoIp\Support\Currency;
  * To learn more including how to enable these headers, read here:
  * https://support.cloudflare.com/hc/en-us/articles/200168236-Configuring-IP-geolocation
  */
-class Cloudflare implements Locator
+final class Cloudflare implements Locator
 {
     public function locate(string $ip): Location
     {

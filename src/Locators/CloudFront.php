@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp\Services;
+namespace GrayMatterLabs\GeoIp\Locators;
 
 use GrayMatterLabs\GeoIp\Contracts\Locator;
 use GrayMatterLabs\GeoIp\Location;

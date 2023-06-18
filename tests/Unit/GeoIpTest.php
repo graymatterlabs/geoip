@@ -17,8 +17,8 @@ class GeoIpTest extends TestCase
     {
         $location = $this->makeGeoIp()->locate($ip);
 
-        $this->assertFalse($location->isDefault);
-        $this->assertEquals($ip, $location->ip);
+        $this->assertFalse($location->isDefault());
+        $this->assertEquals($ip, $location->getIp());
     }
 
     /** @dataProvider providesInvalidIpAddresses */
@@ -34,7 +34,7 @@ class GeoIpTest extends TestCase
         GeoIp::setDefaultLocation(new Location('1.1.1.1'));
 
         $location = $this->makeGeoIp()->locate($ip);
-        $this->assertTrue($location->isDefault);
+        $this->assertTrue($location->isDefault());
         GeoIp::setDefaultLocation(null);
     }
 

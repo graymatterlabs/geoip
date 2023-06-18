@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp\Services;
+namespace GrayMatterLabs\GeoIp\Locators;
 
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;

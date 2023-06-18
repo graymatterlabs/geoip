@@ -2,18 +2,26 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp;
+namespace GrayMatterLabs\GeoIp\Locators;
 
+use GrayMatterLabs\GeoIp\Contracts\Locator;
+use GrayMatterLabs\GeoIp\Location;
 use Psr\SimpleCache\CacheInterface;
 
-final class CachedGeoip
+/**
+ * A decorator to add caching to any Locator implementation.
+ */
+final class Cached implements Locator
 {
-    public function __construct(private GeoIp $geoIp, private CacheInterface $cache)
+    private string $prefix;
+
+    public function __construct(private Locator $geoIp, private CacheInterface $cache, string $prefix = 'geoip')
     {
+        $this->prefix = $this->normalizePrefix($prefix);
     }
 
     /**
-     * Attempt to locate and remember the geolocation of the Ip address.
+     * Attempt to remember or locate the geolocation of the Ip address.
      *
      * @param string $ip
      *
@@ -31,11 +39,22 @@ final class CachedGeoip
 
         $location = $this->geoIp->locate($ip);
 
-        if (! $location->isDefault) {
+        if (! $location->isDefault()) {
             $this->cache->set($key, $location);
         }
 
         return $location;
+    }
+
+    /**
+     * Normalize the cache key prefix.
+     *
+     * @param string $prefix
+     * @return string
+     */
+    private function normalizePrefix(string $prefix): string
+    {
+        return preg_replace("/[^A-Za-z0-9._]/", '', $prefix);
     }
 
     /**
@@ -47,6 +66,6 @@ final class CachedGeoip
      */
     private function getCacheKey(string $ip): string
     {
-        return 'geoip:' . md5($ip);
+        return $this->prefix . ':' . md5($ip);
     }
 }

@@ -6,7 +6,7 @@ namespace GrayMatterLabs\GeoIp\Tests\Integration;
 
 use GeoIp2\Database\Reader;
 use GrayMatterLabs\GeoIp\GeoIp;
-use GrayMatterLabs\GeoIp\Services\MaxMind;
+use GrayMatterLabs\GeoIp\Locators\MaxMind;
 use PHPUnit\Framework\TestCase;
 
 class MaxMindDatabaseTest extends TestCase
@@ -19,7 +19,7 @@ class MaxMindDatabaseTest extends TestCase
 
         $location = $geoip->locate('8.8.8.8');
 
-        $this->assertEquals('8.8.8.8', $location->ip);
-        $this->assertFalse($location->isDefault);
+        $this->assertEquals('8.8.8.8', $location->getIp());
+        $this->assertFalse($location->isDefault());
     }
 }

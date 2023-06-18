@@ -24,7 +24,6 @@ final class GeoIp
      * @return \GrayMatterLabs\GeoIp\Location
      * @throws \GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException
      * @throws \GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function locate(string $ip): Location
     {

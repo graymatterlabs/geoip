@@ -11,7 +11,7 @@ This package provides an opinionated framework for resolving geolocations from I
 You can install the package via composer:
 
 ```bash
-composer require graymatterlabs/geoip:^2.0
+composer require graymatterlabs/geoip:^3.0
 ```
 
 ## Usage
@@ -19,14 +19,14 @@ composer require graymatterlabs/geoip:^2.0
 ```php
 use GrayMatterLabs\GeoIp\GeoIp;
 
+// $locator = new GrayMatterLabs\GeoIp\Locators\Cached($locator, $cache);
 $geoip = new GeoIp($locator);
-// $geoip = new CachedGeoIp($geoip, $cache);
 
 $location = $geoip->locate($ip);
 
-$location->countryCode; // 'US'
+$location->getCountryCode(); // 'US'
 
-if ($location->isDefault) {
+if ($location->isDefault()) {
     //
 }
 ```

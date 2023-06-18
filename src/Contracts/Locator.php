@@ -9,6 +9,8 @@ use GrayMatterLabs\GeoIp\Location;
 interface Locator
 {
     /**
+     * Attempt to locate the geolocation of the Ip address.
+     *
      * @param string $ip
      *
      * @return \GrayMatterLabs\GeoIp\Location

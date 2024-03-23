@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp\Locators;
+namespace GrayMatterLabs\GeoIp\Services;
 
-use GrayMatterLabs\GeoIp\Contracts\Locator;
+use GrayMatterLabs\GeoIp\Contracts\Service;
 use GrayMatterLabs\GeoIp\Location;
 use Psr\SimpleCache\CacheInterface;
 
 /**
  * A decorator to add caching to any Locator implementation.
  */
-final class Cached implements Locator
+class Cached implements Service
 {
     private string $prefix;
 
-    public function __construct(private Locator $geoIp, private CacheInterface $cache, string $prefix = 'geoip')
+    public function __construct(private Service $service, private CacheInterface $cache, string $prefix = 'geoip')
     {
         $this->prefix = $this->normalizePrefix($prefix);
     }
@@ -23,9 +23,7 @@ final class Cached implements Locator
     /**
      * Attempt to remember or locate the geolocation of the Ip address.
      *
-     * @param string $ip
      *
-     * @return \GrayMatterLabs\GeoIp\Location
      * @throws \GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException
      * @throws \GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -33,13 +31,14 @@ final class Cached implements Locator
     public function locate(string $ip): Location
     {
         $key = $this->getCacheKey($ip);
+
         if ($cached = $this->cache->get($key)) {
             return $cached;
         }
 
-        $location = $this->geoIp->locate($ip);
+        $location = $this->service->locate($ip);
 
-        if (! $location->isDefault()) {
+        if (! $location->isDefault) {
             $this->cache->set($key, $location);
         }
 
@@ -48,24 +47,17 @@ final class Cached implements Locator
 
     /**
      * Normalize the cache key prefix.
-     *
-     * @param string $prefix
-     * @return string
      */
     private function normalizePrefix(string $prefix): string
     {
-        return preg_replace("/[^A-Za-z0-9._]/", '', $prefix);
+        return preg_replace('/[^A-Za-z0-9._]/', '', $prefix);
     }
 
     /**
      * Get the cache key for the Ip.
-     *
-     * @param string $ip
-     *
-     * @return string
      */
     private function getCacheKey(string $ip): string
     {
-        return $this->prefix . ':' . md5($ip);
+        return $this->prefix.':'.md5($ip);
     }
 }

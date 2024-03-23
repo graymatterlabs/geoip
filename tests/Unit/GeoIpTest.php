@@ -7,7 +7,7 @@ namespace GrayMatterLabs\GeoIp\Tests\Unit;
 use GrayMatterLabs\GeoIp\Exceptions\InvalidIpAddressException;
 use GrayMatterLabs\GeoIp\GeoIp;
 use GrayMatterLabs\GeoIp\Location;
-use GrayMatterLabs\GeoIp\Tests\Mocks\MockLocator;
+use GrayMatterLabs\GeoIp\Tests\Mocks\MockService;
 use PHPUnit\Framework\TestCase;
 
 class GeoIpTest extends TestCase
@@ -15,17 +15,17 @@ class GeoIpTest extends TestCase
     /** @dataProvider providesValidIpAddresses */
     public function test_it_locates_an_ip_addresses_geolocation(string $ip): void
     {
-        $location = $this->makeGeoIp()->locate($ip);
+        $location = (new GeoIp(new MockService()))->locate($ip);
 
-        $this->assertFalse($location->isDefault());
-        $this->assertEquals($ip, $location->getIp());
+        $this->assertFalse($location->isDefault);
+        $this->assertEquals($ip, $location->ip);
     }
 
     /** @dataProvider providesInvalidIpAddresses */
     public function test_it_requires_a_valid_ip_address(string $ip): void
     {
         $this->expectException(InvalidIpAddressException::class);
-        $this->makeGeoIp()->locate($ip);
+        (new GeoIp(new MockService()))->locate($ip);
     }
 
     /** @dataProvider providesPrivateIpAddresses */
@@ -33,18 +33,18 @@ class GeoIpTest extends TestCase
     {
         GeoIp::setDefaultLocation(new Location('1.1.1.1'));
 
-        $location = $this->makeGeoIp()->locate($ip);
-        $this->assertTrue($location->isDefault());
+        $location = (new GeoIp(new MockService()))->locate($ip);
+        $this->assertTrue($location->isDefault);
         GeoIp::setDefaultLocation(null);
     }
 
     public function test_it_raises_an_exception_if_a_default_location_is_not_specified_and_an_ip_address_cannot_be_located(): void
     {
         $this->expectException(InvalidIpAddressException::class);
-        $this->makeGeoIp()->locate('127.0.0.1');
+        (new GeoIp(new MockService()))->locate('127.0.0.1');
     }
 
-    public function providesValidIpAddresses(): array
+    public static function providesValidIpAddresses(): array
     {
         return [
             'ipv4' => ['1.1.1.1'],
@@ -52,7 +52,7 @@ class GeoIpTest extends TestCase
         ];
     }
 
-    public function providesInvalidIpAddresses(): array
+    public static function providesInvalidIpAddresses(): array
     {
         return [
             'ipv4' => ['1.1.1.1111'],
@@ -60,16 +60,11 @@ class GeoIpTest extends TestCase
         ];
     }
 
-    public function providesPrivateIpAddresses(): array
+    public static function providesPrivateIpAddresses(): array
     {
         return [
             'ipv4' => ['127.0.0.1'],
             'ipv6' => ['FDC8:BF8B:E62C:ABCD:1111:2222:3333:4444'],
         ];
-    }
-
-    public function makeGeoIp(): GeoIp
-    {
-        return new GeoIp(new MockLocator());
     }
 }

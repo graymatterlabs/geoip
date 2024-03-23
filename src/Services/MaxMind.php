@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp\Locators;
+namespace GrayMatterLabs\GeoIp\Services;
 
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\ProviderInterface;
 use GeoIp2\WebService\Client;
-use GrayMatterLabs\GeoIp\Contracts\Locator;
+use GrayMatterLabs\GeoIp\Contracts\Service;
 use GrayMatterLabs\GeoIp\Exceptions\LocationNotFoundException;
 use GrayMatterLabs\GeoIp\Location;
 use GrayMatterLabs\GeoIp\Support\Currency;
@@ -21,7 +21,7 @@ use GrayMatterLabs\GeoIp\Support\Currency;
  * To learn more including where to license the databases and/or services from, read here:
  * https://www.maxmind.com
  */
-final class MaxMind implements Locator
+final class MaxMind implements Service
 {
     public function __construct(private ProviderInterface $provider)
     {
@@ -30,10 +30,7 @@ final class MaxMind implements Locator
     /**
      * * Instantiate an instance of MaxMind using the database provider.
      *
-     * @param string $path
-     * @param array<string> $locales
-     *
-     * @return self
+     * @param  array<string>  $locales
      *
      * @throws \MaxMind\Db\Reader\InvalidDatabaseException
      */
@@ -45,11 +42,7 @@ final class MaxMind implements Locator
     /**
      * Instantiate an instance of MaxMind using the web provider.
      *
-     * @param int $accountId
-     * @param string $licenseKey
-     * @param array<string> $locales
-     *
-     * @return self
+     * @param  array<string>  $locales
      */
     public static function web(int $accountId, string $licenseKey, array $locales = ['en']): self
     {

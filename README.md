@@ -24,9 +24,9 @@ $geoip = new GeoIp($locator);
 
 $location = $geoip->locate($ip);
 
-$location->getCountryCode(); // 'US'
+$location->countryCode; // 'US'
 
-if ($location->isDefault()) {
+if ($location->isDefault) {
     //
 }
 ```

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace GrayMatterLabs\GeoIp\Locators;
+namespace GrayMatterLabs\GeoIp\Services;
 
-use GrayMatterLabs\GeoIp\Contracts\Locator;
+use GrayMatterLabs\GeoIp\Contracts\Service;
 use GrayMatterLabs\GeoIp\Location;
 use GrayMatterLabs\GeoIp\Support\Currency;
 
@@ -16,7 +16,7 @@ use GrayMatterLabs\GeoIp\Support\Currency;
  * To learn more including how to enable these headers, read here:
  * https://aws.amazon.com/about-aws/whats-new/2020/07/cloudfront-geolocation-headers/
  */
-final class CloudFront implements Locator
+final class CloudFront implements Service
 {
     public function locate(string $ip): Location
     {
@@ -37,8 +37,8 @@ final class CloudFront implements Locator
 
     private function castHeaderIfExists(string $header, string $type = 'string'): mixed
     {
-        $header = 'HTTP_' . strtoupper($header);
-        if ($value = $_SERVER[$header] ?? null) {
+        $header = 'HTTP_'.strtoupper($header);
+        if (! is_null($value = $_SERVER[$header] ?? null)) {
             settype($value, $type);
         }
 

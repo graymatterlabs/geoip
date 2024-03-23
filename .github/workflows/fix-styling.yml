@@ -1,20 +1,19 @@
-name: Analyze with PHPStan
+name: Fix styling
 
 on:
   push:
     paths:
       - '**.php'
-      - 'phpstan.neon.dist'
+      - 'pint.json'
   pull_request:
     paths:
       - '**.php'
-      - 'phpstan.neon.dist'
-
+      - 'pint.json'
 
 jobs:
-  phpstan:
-    name: phpstan
+  pint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,5 +27,10 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction
 
-      - name: Run PHPStan
-        run: ./vendor/bin/phpstan --error-format=github
+      - name: Run PHP CS Fixer
+        run: ./vendor/bin/pint
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Fix styling
